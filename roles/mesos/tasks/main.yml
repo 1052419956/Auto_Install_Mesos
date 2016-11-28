@@ -1,0 +1,58 @@
+---
+ - name: Make Dir
+   file: path={{ base_path }}{{ item }}/mesos-master/ state=directory mode=0744 owner=root group=root
+   with_items:
+    - log
+    - data
+    - config
+   when: hostvars[inventory_hostname].master == 'true'
+
+ - name: Make Dir
+   file: path={{ base_path }}{{ item }}/mesos-slave/ state=directory mode=0744 owner=root group=root
+   with_items:
+    - log
+    - data
+    - config
+   when: hostvars[inventory_hostname].slave == 'true'
+
+ - name: Change Service Status
+   service: name=mesos-slave.service enabled=yes
+   when: hostvars[inventory_hostname].slave == 'true'
+
+ - name: Change Service Status
+   service: name=mesos-slave.service enabled=no
+   when: hostvars[inventory_hostname].slave == 'false'
+
+ - name: Change Service Status
+   service: name=mesos-master.service enabled=yes
+   when: hostvars[inventory_hostname].master == 'true'
+
+ - name: Change Service Status
+   service: name=mesos-master.service enabled=no
+   when: hostvars[inventory_hostname].master == 'false'
+
+ - name: Change Config File
+   template: src=zk dest=/etc/mesos/zk mode=0644 owner=root group=root
+
+ - name: Change Config File
+   template: src=mesos dest=/etc/default/mesos mode=0644 owner=root group=root
+
+ - name: Change Config File
+   template: src=master/{{ item }} dest=/etc/mesos-master/{{ item }} mode=0644 owner=root group=root
+   with_items:
+    - ip
+    - quorum
+    - log_dir
+    - hostname
+    - work_dir
+   when: hostvars[inventory_hostname].master == 'true'
+
+ - name: Change Config File
+   template: src=slave/{{ item }} dest=/etc/mesos-slave/{{ item }} mode=0644 owner=root group=root
+   with_items:
+    - ip
+    - log_dir
+    - hostname
+    - work_dir
+    - containerizers
+   when: hostvars[inventory_hostname].slave == 'true'

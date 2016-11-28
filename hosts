@@ -1,0 +1,6 @@
+[zk]
+vip3-ali-hangzhou-wb-ecs-sdb-mesos-master1 id=1
+[mesos]
+vip3-ali-hangzhou-wb-ecs-sdb-mesos-master1 master=true  slave=true hostname=vip3-ali-hangzhou-wb-ecs-sdb-mesos-master1
+[marathon] 
+vip3-ali-hangzhou-wb-ecs-sdb-mesos-master1 master=true

@@ -1,0 +1,25 @@
+---
+ - name: Make Dir
+   file: path={{ base_path }}{{ item }}/zookeeper state=directory mode=0744 owner=root group=root
+   with_items:
+    - log
+    - data
+    - config
+
+ - name: change Service Status
+   service: name=zookeeper.service enabled=yes
+
+ - name: Change Service File
+   template: src=zookeeper.service dest=/usr/lib/systemd/system/zookeeper.service mode=0644 owner=root group=root
+   notify: systemctl daemon-reload
+
+ - name: Change Service Myid
+   template: src=myid dest={{ base_path }}/data/zookeeper/myid mode=0644 owner=root group=root
+
+ - name: Change Config File
+   template: src={{ item }} dest={{ base_path }}/config/zookeeper/{{ item }} mode=0744 owner=root group=root
+   with_items:
+    - zoo.cfg
+    - log4j.properties
+   notify: restart zookeeper
+

@@ -1,0 +1,1 @@
+{{ facter_ipaddress_eth0 }}

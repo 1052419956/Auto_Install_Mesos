@@ -1,0 +1,4 @@
+---
+ - hosts: mesos
+   roles:
+    - role: mesos
