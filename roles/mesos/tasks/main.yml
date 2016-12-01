@@ -46,6 +46,7 @@
     - hostname
     - work_dir
    when: hostvars[inventory_hostname].master == 'true'
+   notify: restart mesos-master
 
  - name: Change Config File
    template: src=slave/{{ item }} dest=/etc/mesos-slave/{{ item }} mode=0644 owner=root group=root
@@ -56,3 +57,4 @@
     - work_dir
     - containerizers
    when: hostvars[inventory_hostname].slave == 'true'
+   notify: restart mesos-slave
